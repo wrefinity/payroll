@@ -9,12 +9,12 @@
 <body>
     
     <div class="d-flex m-4 justify-content-center align-items-center">
-        <div class="login-form">
+        <div class="auth-form">
         <h4 class="text-center mb-4">Login</h4>
         <form id="loginForm" action="POST">
             <div class="mb-3">
-                <label for="username" class="form-label">Username:</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password:</label>

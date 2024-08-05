@@ -10,13 +10,17 @@ class Authenticate extends DB
         parent::__construct();
     }
 
-    public function loginUser($username, $pass)
-    {
-        $stmt = $this->conn->prepare("SELECT * FROM $this->table WHERE username = ?");
-        $stmt->bind_param("s", $username);
+    private function query_maker($email){
+        $stmt = $this->conn->prepare("SELECT * FROM $this->table WHERE email = ?");
+        $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
+        return $result;
+    }
 
+    public function loginUser($email, $pass)
+    {
+        $result = $this->query_maker($email);
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
             if (password_verify($pass, $user['password'])) {
@@ -32,11 +36,7 @@ class Authenticate extends DB
     public function registerUser($username, $email, $pass)
     {
         // Check if username or email already exists
-        $stmt = $this->conn->prepare("SELECT * FROM $this->table WHERE username = ? OR email = ?");
-        $stmt->bind_param("ss", $username, $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
+        $result = $this->query_maker($email);;
         if ($result->num_rows > 0) {
             return false; // Username or email already exists
         }
@@ -45,7 +45,7 @@ class Authenticate extends DB
         $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
 
         // Insert the new user into the database
-        $stmt = $this->conn->prepare("INSERT INTO $this->table (username, email, password) VALUES (?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO $this->table (`username`, `email`, `password`) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $username, $email, $hashed_pass);
 
         if ($stmt->execute()) {
