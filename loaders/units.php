@@ -1,5 +1,5 @@
 <?php
-include "../db/connect.php";
+require_once "../db/connect.php";
 
 class DepartmentUnitsLoader extends DB {
     private $role;

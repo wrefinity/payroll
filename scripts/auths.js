@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("loginForm").addEventListener("submit", function (e) {
         e.preventDefault();
-        const url = '../routes/login.php';
+        const url = './routes/auths.php';
         const formData = new FormData(this);
+        formData.append('action', 'login');
         
         fetch(url, {
             method: 'POST',

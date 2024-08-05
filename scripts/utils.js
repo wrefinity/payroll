@@ -27,7 +27,6 @@ function populateSelect(selectId, data, defaultOptionText = '--', defaultOptionV
         const option = document.createElement('option');
         // Set the value of the option element to the key
         option.value = key;
-        // window.alert( `------------- ${key}`)
         // Set the text content of the option element to the value
         option.textContent = value;
         // Append the option element to the select element
