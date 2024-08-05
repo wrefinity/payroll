@@ -5,7 +5,7 @@ class DepartmentUnitsLoader extends DB {
     private $role;
     private $ministry_id;
     private $dept_id;
-    private $table = "unittb";
+    private $table = "unit_tb";
 
 
     public function __construct($role, $ministry_id, $dept_id) {
