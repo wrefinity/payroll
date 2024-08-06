@@ -9,12 +9,15 @@ if (!isset($_SESSION['username'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <<?php require_once("../includes/index.php") ?>
+    <?php require("./included.php"); ?>
 </head>
+
 <body>
     <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
     <p>You are logged in.</p>
     <a href="logout.php">Logout</a>
 </body>
+
 </html>
