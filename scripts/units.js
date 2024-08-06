@@ -1,4 +1,4 @@
-const url = 'unit_routes.php';
+const url = './routes/unit_routes.php';
 
 // This function fetches all units of a department based on the selected ministry_id and dept_id ID
 function loadUnit(role, ministry_id, dept_id) {

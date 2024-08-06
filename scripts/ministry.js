@@ -1,4 +1,4 @@
-const url = 'ministry_routes.php';
+const url = './routes/ministry_routes.php';
 
 $(document).ready(function() {
     loadMinistries();
@@ -7,6 +7,7 @@ $(document).ready(function() {
     $('#ministryForm').on('submit', function(event) {
         event.preventDefault();
         let formData = new FormData(this);
+        formData.append("action", "create");
 
         $.ajax({
             url,
