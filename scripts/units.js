@@ -1,5 +1,7 @@
+const url = 'unit_routes.php';
+
 // This function fetches all units of a department based on the selected ministry_id and dept_id ID
-function loadProgramme(role, ministry_id, dept_id) {
+function loadUnit(role, ministry_id, dept_id) {
   // Define the URL to which the POST request will be sent
   const url = "loaders/units.php";
 
@@ -36,4 +38,90 @@ function loadProgramme(role, ministry_id, dept_id) {
       }
     }
   );
+}
+
+$(document).ready(function() {
+
+    loadUnits();
+    $('#unitForm').on('submit', function(event) {
+        event.preventDefault();
+        let formData = new FormData(this);
+
+        $.ajax({
+            url,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                let result = JSON.parse(response);
+                if (result.status === 'success') {
+                    alert('Unit saved successfully!');
+                    $('#unitForm')[0].reset();
+                    loadUnits();
+                } else {
+                    alert('Error saving unit.');
+                }
+            }
+        });
+    });
+});
+
+
+
+function loadUnits() {
+    $.post(url, { action: 'getUnits' }, function(response) {
+        let result = JSON.parse(response);
+        if (result.status === 'success') {
+            let unitList = $('#unitList');
+            unitList.empty();
+            result.data.forEach(unit => {
+                unitList.append(`
+                    <tr>
+                        <td>${unit.name}</td>
+                        <td>${unit.description}</td>
+                        <td>${unit.address}</td>
+                        <td>${unit.ministry_id}</td>
+                        <td>
+                            <button class="btn btn-warning" onclick="editUnit(${unit.id})">Edit</button>
+                            <button class="btn btn-danger" onclick="deleteUnit(${unit.id})">Delete</button>
+                        </td>
+                    </tr>
+                `);
+            });
+        } else {
+            alert('Error loading units.');
+        }
+    });
+}
+
+function editUnit(id) {
+    $.post(url, { action: 'getUnitById', id: id }, function(response) {
+        let result = JSON.parse(response);
+        if (result.status === 'success') {
+            let unit = result.data;
+            $('#unitAction').val('updateUnit');
+            $('#unitId').val(unit.id);
+            $('#ministry_id').val(unit.ministry_id);
+            $('#unitName').val(unit.name);
+            $('#unitDescription').val(unit.description);
+            $('#unitAddress').val(unit.address);
+        } else {
+            alert('Error fetching unit details.');
+        }
+    });
+}
+
+function deleteUnit(id) {
+    if (confirm('Are you sure you want to delete this unit?')) {
+        $.post(url, { action: 'deleteUnit', id: id }, function(response) {
+            let result = JSON.parse(response);
+            if (result.status === 'success') {
+                alert('Unit deleted successfully!');
+                loadUnits();
+            } else {
+                alert('Error deleting unit.');
+            }
+        });
+    }
 }
